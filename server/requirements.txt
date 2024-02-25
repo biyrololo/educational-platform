@@ -1,0 +1,10 @@
+fastapi
+sqlalchemy
+pydantic
+uvicorn
+psycopg2-binary
+psycopg2
+uvicorn[standard]
+fastapi-limiter
+selenium
+fake-useragent
