@@ -31,3 +31,6 @@ def edit_ask(id, text, image, answers, correct_answer, test_id, db):
     ask.correct_answer = correct_answer
     ask.test_id = test_id
     db.commit()
+
+def get_asks_by_ids(ids : list, db):
+    return db.query(Ask).filter(Ask.id.in_(ids))
