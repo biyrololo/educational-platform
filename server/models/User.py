@@ -11,10 +11,11 @@ class User(Base):
 def check_user_pass_key(pass_key, db):
     return db.query(User).filter_by(pass_key=pass_key).first()
 
-def create_user(name, pass_key, db):
+def create_user(name, pass_key, db) -> int:
     user = User(name=name, pass_key=pass_key)
     db.add(user)
     db.commit()
+    return user.id
 
 def delete_user(id, db):
     db.query(User).filter_by(id=id).delete()
