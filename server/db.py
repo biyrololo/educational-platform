@@ -5,6 +5,7 @@ from models import Base
 from os import getenv
 
 DATABASE_URL = getenv("DATABASE_URL")
+# DATABASE_URL = "postgresql://postgres:rootroot@localhost:5433/education-project"
 
 engine = create_engine(DATABASE_URL)
 
