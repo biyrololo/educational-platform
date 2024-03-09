@@ -1,0 +1,21 @@
+#cards-grid{
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 50px;
+    display: grid;
+    grid-template-columns: repeat(3, 345px);
+    justify-content: center;
+    gap: 60px;
+}
+
+@media (max-width: 1200px) {
+    #cards-grid{
+        grid-template-columns: repeat(2, 345px);
+    }
+}
+
+@media (max-width: 800px){
+    #cards-grid{
+        grid-template-columns: repeat(1, 345px);
+    }
+}

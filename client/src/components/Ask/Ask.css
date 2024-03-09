@@ -1,0 +1,34 @@
+#ans-grid{
+    gap: 10px;
+}
+
+#ask{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#test-page{
+    box-sizing: border-box;
+    padding: 50px 15%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.active-radio{
+    background: rgba(39, 139, 238, 0.2) !important;
+}
+
+#ask-img {
+    max-width: 100%;
+    height: auto;
+    max-height: 300px;
+    object-fit: contain;
+}
+
+#test-page-actions{
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}

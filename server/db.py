@@ -1,8 +1,10 @@
-DATABASE_URL = "postgresql://postgres:rootroot@localhost:5433/education-project"
-
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models.base import Base
+from models import Base
+
+from os import getenv
+
+DATABASE_URL = getenv("DATABASE_URL")
 
 engine = create_engine(DATABASE_URL)
 
