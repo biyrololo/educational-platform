@@ -4,12 +4,12 @@ import './Search.css'
 export default function Search(){
     return (
         <div id="test-find">
-            <TextField
+            {/* <TextField
             id="test-find-tf"
             placeholder="Поиск"
             variant="outlined"
             size="small"
-            />
+            /> */}
         </div>
     )
 }
