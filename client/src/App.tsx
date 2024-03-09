@@ -17,9 +17,9 @@ import axios from 'axios';
 
 function App() {
 
+  axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL;
 
   useEffect(() => {
-    axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL;
     const token = localStorage.getItem('pass_key');
     if (token) {
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
