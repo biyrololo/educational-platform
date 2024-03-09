@@ -11,11 +11,14 @@ export default function CardsGrid(){
     useEffect(() => {
         const cancelToken = axios.CancelToken.source();
 
+        console.log(axios.defaults.baseURL)
+
         const url = '/tests'
 
         axios.get(url, {cancelToken: cancelToken.token})
         .then((response) => {
             setTests(response.data);
+            console.log(response.data);
         })
         .catch((error) => {
             if(axios.isCancel(error)){
