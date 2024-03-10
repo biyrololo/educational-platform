@@ -83,7 +83,7 @@ export default function UserResults() {
                                         }
                                         <TableCell align="center">
                                             <span
-                                            onClick={() => navigate(`/result/${data_row.test_id}`)}
+                                            onClick={() => navigate(`/result/${data_row.id}`)}
                                             >
                                                 {data_row.test_name}
                                             </span>
