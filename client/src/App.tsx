@@ -14,10 +14,12 @@ import AllUsersPage from 'pages/AllUsersPage';
 import LoginPage from 'pages/LoginPage';
 import AdminLoginPage from 'pages/AdminLoginPage';
 import axios from 'axios';
+import TestsPage from 'pages/TestsPage';
 
 function App() {
 
   axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL;
+  // axios.defaults.baseURL = 'http://localhost:8000';
 
   useEffect(() => {
     const token = localStorage.getItem('pass_key');
@@ -33,11 +35,12 @@ function App() {
         <Route path='/test/:id' element={<TestPage/>}/>
         <Route path="/result/:resultId" element={<ResultPage/>}/>
         <Route path="/create_user" element={<CreateUserPage/>}/>
-        <Route path='/create_test' element={<CreateTestPage/>}/>
+        <Route path='/create_test/:test_id?' element={<CreateTestPage/>}/>
         <Route path='/user_results' element={<UsersResultPage/>}/>
         <Route path='/users' element={<AllUsersPage/>}/>
         <Route path="/login" element={<LoginPage/>} />
         <Route path="/admin_login" element={<AdminLoginPage/>} />
+        <Route path="/tests" element={<TestsPage/>} />
       </Routes>
       <ToastContainer 
             position="bottom-right"

@@ -35,6 +35,20 @@ def get_tests(db = Depends(get_db)):
     tests = get_all_tests(db)
     return tests
 
+@app.get('/tests/{test_id}')
+def get_test(test_id : int, admin_pass_key : HTTPAuthorizationCredentials = Depends(security), db = Depends(get_db)):
+    admin_pass_key = admin_pass_key.credentials
+    admin = check_user_pass_key(admin_pass_key, db)
+    if admin is None:
+        raise HTTPException(status_code=401, detail="Invalid Admin key")
+    if admin.role != UserRole.admin:
+        raise HTTPException(status_code=401, detail="Invalid Admin key")
+
+    test = get_test_by_id(test_id, db)
+    asks = get_asks_by_test_id(test_id, db)
+
+    return {"test" : test, "asks" : asks}
+
 @app.get('/asks/{asks_list_id}')
 def get_asks(asks_list_id : int, pass_key : HTTPAuthorizationCredentials = Depends(security), db = Depends(get_db)):
     pass_key = pass_key.credentials
@@ -125,7 +139,7 @@ class CreateTestAnswerItem(BaseModel):
 
 class TestItem(BaseModel):
     name : str
-    img_src : str
+    img_src : str = None
     answers : List[CreateTestAnswerItem]
 
 @app.post('/admin/create_test')
@@ -140,6 +154,33 @@ def create_test_admin(body : TestItem, admin_pass_key : HTTPAuthorizationCredent
     for answer in body.answers:
         add_ask(text=answer.text, image=answer.image, answers=answer.answers, correct_answer=answer.correct_answer, test_id=id, db=db)
     return id
+
+@app.delete('/admin/delete_test/{test_id}')
+def delete_test_admin(test_id : int, admin_pass_key : HTTPAuthorizationCredentials = Depends(security), db = Depends(get_db)):
+    admin_pass_key = admin_pass_key.credentials
+    admin = check_user_pass_key(admin_pass_key, db)
+    if admin is None:
+        raise HTTPException(status_code=401, detail="Invalid Admin key")
+    if admin.role != UserRole.admin:
+        raise HTTPException(status_code=401, detail="Invalid Admin key")
+    delete_test(test_id, db)
+    delete_asks_by_test_id(test_id, db)
+    return
+
+@app.patch('/admin/update_test/{test_id}')
+def update_test_admin(test_id : int, body : TestItem, admin_pass_key : HTTPAuthorizationCredentials = Depends(security), db = Depends(get_db)):
+    admin_pass_key = admin_pass_key.credentials
+    admin = check_user_pass_key(admin_pass_key, db)
+    if admin is None:
+        raise HTTPException(status_code=401, detail="Invalid Admin key")
+    if admin.role != UserRole.admin:
+        raise HTTPException(status_code=401, detail="Invalid Admin key")
+
+    delete_asks_by_test_id(test_id, db)
+    edit_test(test_id, body.name, body.img_src, db)
+    for answer in body.answers:
+        add_ask(text=answer.text, image=answer.image, answers=answer.answers, correct_answer=answer.correct_answer, test_id=test_id, db=db)
+    return
 
 def create_random_passkey():
     return token_hex(16)

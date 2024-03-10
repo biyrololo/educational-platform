@@ -34,7 +34,9 @@ export default function AskComponent({ask, setAns}: AskComponentProps) {
             component={"div"}
             >
                 {
-                    ask.text
+                    ask.text.split('\n').map((text, index) => {
+                        return <p key={index}>{text}</p>
+                    })
                 }
             </Typography>
             {
@@ -67,7 +69,9 @@ function VariantsOfAnswer(props: AnsProps) {
                         <StyledFormControl 
                         key={index} 
                         control={<Radio />} 
-                        label={answer} 
+                        label={answer.split('\n').map((text, index) => {
+                            return <p key={index}>{text}</p>
+                        })} 
                         value={answer}
                         className={answer === props.ans ? 'active-radio' : ''}
                         />

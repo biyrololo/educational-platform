@@ -27,3 +27,6 @@ def edit_test(id, name, img_src, db):
     test.name = name
     test.img_src = img_src
     db.commit()
+
+def get_test_by_id(id, db):
+    return db.query(Test).filter_by(id=id).first()

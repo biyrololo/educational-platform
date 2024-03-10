@@ -34,3 +34,7 @@ def edit_ask(id, text, image, answers, correct_answer, test_id, db):
 
 def get_asks_by_ids(ids : list, db):
     return db.query(Ask).filter(Ask.id.in_(ids)).all()
+
+def delete_asks_by_test_id(test_id, db):
+    db.query(Ask).filter(Ask.test_id == test_id).delete()
+    db.commit()

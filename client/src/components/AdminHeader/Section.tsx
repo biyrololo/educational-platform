@@ -21,9 +21,13 @@ const SECTIONS : Section[] = [
         path: '/create_test'
     },
     {
+        title: 'Тесты',
+        path: '/tests'
+    },
+    {
         title: 'Результаты',
         path: '/user_results'
-    }
+    },
 ]
 
 const StyledBtn = styled(Button)({

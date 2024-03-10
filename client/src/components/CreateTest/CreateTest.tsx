@@ -1,5 +1,5 @@
 import { Button, Divider, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TestInfo from "./TestInfo";
 import { TestInfoType, TestAskInfoType } from "types/CreateTestTypes";
 import './CreateTest.css'
@@ -8,8 +8,11 @@ import AddIcon from '@mui/icons-material/Add';
 import { TestRType } from "types";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 
 export default function CreateTest() {
+
+    const test_id = useParams().test_id;
 
     const [testInfo, setTestInfo] = useState<TestInfoType>(
         {
@@ -32,6 +35,70 @@ export default function CreateTest() {
                 }
             ]
         })
+    }
+
+    useEffect(() => {
+        if(test_id){
+            const url = `/tests/${test_id}`;
+
+            const cancelToken = axios.CancelToken.source();
+
+            axios.get(url, {cancelToken: cancelToken.token})
+            .then((response) => {
+                setTestInfo({
+                    name: response.data.name,
+                    img: response.data.img_src
+                })
+                setAsks(response.data.asks)
+            })
+            .catch((error) => {
+                console.log('Error: ', error.message);
+            })
+        }
+    }, [test_id])
+
+    function editTest(){
+        if(!test_id){
+            toast.error('Тест не найден')
+            return
+        }
+        if(!testInfo.name){
+            toast.error('Название не может быть пустым')
+            return
+        }
+
+        if(!asks.length){
+            toast.error('Тест должен содержать хотя бы один вопрос')
+            return
+        }
+
+        //  check if correct answers
+
+        for(let i = 0; i < asks.length; i++){
+            if(asks[i].correct_answer === ''){
+                toast.error('Вопрос должен иметь правильный ответ')
+                return
+            }
+        }
+
+        const url = `/admin/update_test/${test_id}`;
+
+        const data : TestRType = {
+            name: testInfo.name,
+            img_src: testInfo.img,
+            answers: asks
+        }
+
+        axios.patch(url, data)
+        .then((response) => {
+            console.log(response.data)
+            toast.success('Тест обновлен')
+        })
+        .catch((error) => {
+            toast.error('Произошла ошибка')
+            console.log(error)
+        })
+
     }
 
     function createTest(){
@@ -76,6 +143,20 @@ export default function CreateTest() {
 
     }
 
+    function moveAsk(index: number, direction: 1 | -1){
+        setAsks(prev => {
+            return prev.map((ask, i) => {
+                if(i === index){
+                    return prev[index + direction]
+                }
+                if(i === index + direction){
+                    return prev[index]
+                }
+                return ask
+            })
+        })
+    }
+
     return (
         <main>
             <div id="create-test">
@@ -110,6 +191,8 @@ export default function CreateTest() {
                                         return prev.filter((a, i) => i !== index)
                                     })
                                 }}
+                                asks_length={asks.length}
+                                moveAsk={moveAsk}
                             />
                         )
                     })
@@ -120,17 +203,34 @@ export default function CreateTest() {
                     <AddIcon />
                 </Button>
             </div>
-            <Button
-            variant="contained"
-            style={{
-                margin: '30px auto 0 auto',
-                display: 'block',
-                width: '250px'
-            }}
-            onClick={createTest}
-            >
-                Создать тест
-            </Button>
+            {
+                test_id ? (
+                    <Button
+                    variant="contained"
+                    style={{
+                        margin: '30px auto 0 auto',
+                        display: 'block',
+                        width: '250px'
+                    }}
+                    onClick={editTest}
+                    >
+                        Редактировать тест
+                    </Button>
+                ) :
+                (
+                    <Button
+                    variant="contained"
+                    style={{
+                        margin: '30px auto 0 auto',
+                        display: 'block',
+                        width: '250px'
+                    }}
+                    onClick={createTest}
+                    >
+                        Создать тест
+                    </Button>
+                )
+            }
         </main>
     )
 }
