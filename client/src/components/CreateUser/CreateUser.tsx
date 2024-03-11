@@ -7,9 +7,10 @@ import axios from "axios";
 export default function CreateUser() {
 
     const nameRef = useRef<HTMLInputElement>(null);
+    const classRef = useRef<HTMLInputElement>(null);
 
     function createUser() {
-        if(!nameRef.current) {
+        if(!nameRef.current || !classRef.current) {
             return;
         }
 
@@ -18,10 +19,16 @@ export default function CreateUser() {
             return;
         }
 
+        if(!classRef.current.value) {
+            toast.error('Введите класс');
+            return;
+        }
+
         const url = `/admin/create_user`;
 
         const data = {
-            name: nameRef.current.value
+            name: nameRef.current.value,
+            grade: classRef.current.value
         }
 
         axios.post(url, data)
@@ -47,6 +54,14 @@ export default function CreateUser() {
                 fullWidth
                 size="small"
                 inputRef={nameRef}
+                />
+                <TextField
+                label="Класс"
+                id="create-user-class"
+                name="create-user-class"
+                fullWidth
+                size="small"
+                inputRef={classRef}
                 />
                 <Button variant="contained" fullWidth onClick={createUser}>Создать</Button>
             </div>

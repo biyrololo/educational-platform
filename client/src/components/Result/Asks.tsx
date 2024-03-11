@@ -5,7 +5,8 @@ import './Result.css'
 import axios from "axios";
 
 type Props = {
-    incorrect_asks_ids: number[]
+    incorrect_asks_ids: number[];
+    user_answers: string[]
 }
 
 export default function Asks(props: Props) {
@@ -27,6 +28,7 @@ export default function Asks(props: Props) {
             if (!response.data) return
             if(Object.keys(response.data).length === 0) return
             setIncorrectAsks(response.data)
+            console.log(response.data)
         })
         .catch((error) => {
             console.log('Error: ', error.message);
@@ -47,6 +49,7 @@ export default function Asks(props: Props) {
                             image={ask.image}
                             text={ask.text}
                             correct_answer={ask.correct_answer}
+                            user_answer={props.user_answers[index]}
                         />
                     )
                 })

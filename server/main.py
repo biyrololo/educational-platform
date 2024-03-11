@@ -88,14 +88,20 @@ def check_answers(body : CheckAnswersBody, asks_list_id : int, pass_key : HTTPAu
 
     incorrect_ids = [ask.id for ask in ans if ask.id in incorrect]
 
+    incorrect_user_answers = [ask.text for ask in ans if ask.id in incorrect]
+
+    grade = user.grade
+
     res_id = add_result(
         user_name=body.user_name,
         user_id=body.user_id,
+        user_grade=grade,
         test_name=body.test_name,
         test_result_correct=len(ans) - len(incorrect),
         test_result_all=len(ans),
         test_id=body.test_id,
         incorrect_asks_ids=incorrect_ids,
+        user_answers=incorrect_user_answers,
         date=body.date,
         db=db
     )
@@ -183,7 +189,7 @@ def update_test_admin(test_id : int, body : TestItem, admin_pass_key : HTTPAutho
     return
 
 def create_random_passkey():
-    return token_hex(16)
+    return token_hex(8)
 
 class UserResponseItem(BaseModel):
     user_id: int
@@ -191,6 +197,7 @@ class UserResponseItem(BaseModel):
 
 class UserItem(BaseModel):
     name : str
+    grade : str
 
 @app.post('/admin/create_user', response_model=UserResponseItem)
 def create_user_admin(user : UserItem, admin_pass_key : HTTPAuthorizationCredentials = Depends(security), db = Depends(get_db)):
@@ -201,7 +208,7 @@ def create_user_admin(user : UserItem, admin_pass_key : HTTPAuthorizationCredent
     if admin.role != UserRole.admin:
         raise HTTPException(status_code=401, detail="Invalid Admin key")
     pass_key = create_random_passkey()
-    user_id = create_user(name=user.name, pass_key=pass_key, db=db, role=UserRole.user)
+    user_id = create_user(name=user.name, pass_key=pass_key, db=db, grade=user.grade, role=UserRole.user)
     return {"user_id" : user_id, "pass_key" : pass_key}
 
 @app.post('/admin/create_admin', response_model=UserResponseItem)
@@ -210,7 +217,7 @@ def create_admin_admin(user : UserItem, create_pass_key : HTTPAuthorizationCrede
     if create_pass_key != ADMIN_CREATE_PASSWORD:
         raise HTTPException(status_code=401, detail="Invalid Admin create key")
     pass_key = create_random_passkey()
-    user_id = create_user(name=user.name, pass_key=pass_key, db=db, role=UserRole.admin)
+    user_id = create_user(name=user.name, pass_key=pass_key, db=db, grade='ADMIN', role=UserRole.admin)
     return {"user_id" : user_id, "pass_key" : pass_key}
 
 @app.get('/users')

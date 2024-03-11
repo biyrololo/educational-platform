@@ -12,12 +12,13 @@ class User(Base):
     name = Column(String, nullable=False)
     pass_key = Column(String, nullable=False)
     role = Column(Enum(UserRole), nullable=False, default=UserRole.user)
+    grade = Column(String, nullable=False)
 
 def check_user_pass_key(pass_key, db):
     return db.query(User).filter_by(pass_key=pass_key).first()
 
-def create_user(name, pass_key, role, db) -> int:
-    user = User(name=name, pass_key=pass_key, role=role)
+def create_user(name, pass_key, grade, role, db) -> int:
+    user = User(name=name, pass_key=pass_key, role=role, grade=grade)
     db.add(user)
     db.commit()
     return user.id

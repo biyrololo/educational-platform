@@ -7,6 +7,7 @@ type ResultType = {
     id: number;
     test_result_all: number;
     incorrect_asks_ids: number[];
+    user_answers: string[];
     date: string;
 }
 

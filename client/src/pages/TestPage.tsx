@@ -18,7 +18,7 @@ const ActionsButton = styled(Button)({
 
 function getDate(){
     const date = new Date();
-    return date.toISOString().split('T')[0]
+    return date.toISOString().replace(/T/, ' ').replace(/\..+/, '')
 }
 
 export default function TestPage() {

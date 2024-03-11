@@ -20,6 +20,7 @@ export default function ResultPage(){
         id: 0,
         test_result_all: 0,
         incorrect_asks_ids: [],
+        user_answers: [],
         date: ""
     })
 
@@ -50,7 +51,7 @@ export default function ResultPage(){
             <main id="result-page">
                 <Typography variant="h3" component="div">{result.test_name}</Typography>
                 <Typography variant="h5" component="div" gutterBottom>Результат: {result.test_result_correct} из {result.test_result_all}</Typography>
-                <Asks incorrect_asks_ids={result.incorrect_asks_ids}/>
+                <Asks incorrect_asks_ids={result.incorrect_asks_ids} user_answers={result.user_answers}/>
                 <Home/>
             </main>
         </>
