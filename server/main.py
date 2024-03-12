@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi import Depends
 from fastapi import HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.responses import FileResponse
 from db import get_db
 
 from models import *
@@ -12,6 +13,8 @@ from typing import List
 
 from secrets import token_hex
 from os import getenv
+
+from resources.excel import save_to_excel
 
 ADMIN_CREATE_PASSWORD = getenv("ADMIN_CREATE_PASSWORD")
 # ADMIN_CREATE_PASSWORD = "rootroot"
@@ -88,7 +91,7 @@ def check_answers(body : CheckAnswersBody, asks_list_id : int, pass_key : HTTPAu
 
     incorrect_ids = [ask.id for ask in ans if ask.id in incorrect]
 
-    incorrect_user_answers = [ask.text for ask in ans if ask.id in incorrect]
+    incorrect_user_answers = [ask.answer for ask in body.answers if ask.ans_id in incorrect_ids]
 
     grade = user.grade
 
@@ -241,3 +244,27 @@ def login(body : LoginItem, db = Depends(get_db)):
     if user:
         return {"user_id" : user.id, "pass_key" : user.pass_key, "is_admin" : user.role == UserRole.admin, "name" : user.name}
     raise HTTPException(status_code=404, detail="Invalid credentials")
+
+@app.get('/download_users')
+def download_users(admin_pass_key : HTTPAuthorizationCredentials = Depends(security), db = Depends(get_db)):
+    admin_pass_key = admin_pass_key.credentials
+    admin = check_user_pass_key(admin_pass_key, db)
+    if admin is None:
+        raise HTTPException(status_code=401, detail="Invalid Admin key")
+    if admin.role != UserRole.admin:
+        raise HTTPException(status_code=401, detail="Invalid Admin key")
+    users = get_all_users(db)
+    users_list = []
+    for user in users:
+        users_list.append({
+            "id" : user.id,
+            "name" : user.name,
+            "grade" : user.grade,
+            "pass_key" : user.pass_key,
+        })
+
+    try:
+        excel_filename = save_to_excel(users_list)
+        return FileResponse(excel_filename, filename=excel_filename, media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f'Failed to create excel file: {e}')

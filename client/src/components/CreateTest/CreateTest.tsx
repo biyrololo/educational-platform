@@ -46,8 +46,8 @@ export default function CreateTest() {
             axios.get(url, {cancelToken: cancelToken.token})
             .then((response) => {
                 setTestInfo({
-                    name: response.data.name,
-                    img: response.data.img_src
+                    name: response.data.test.name,
+                    img: response.data.test.img_src
                 })
                 setAsks(response.data.asks)
             })
