@@ -17,7 +17,7 @@ const ActionsButton = styled(Button)({
 })
 
 function getDate(){
-    const date = new Date();
+    const date = new Date(new Date().getTime() + 60*60*60);
     return date.toISOString().replace(/T/, ' ').replace(/\..+/, '')
 }
 
