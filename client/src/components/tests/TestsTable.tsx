@@ -49,7 +49,7 @@ export default function TestsTable(){
     }, [])
 
     function deleteTest(id: number){
-        const url = `/admin/tests/delete_test/${id}`;
+        const url = `/admin/delete_test/${id}`;
 
         axios.delete(url)
         .then((response) => {
