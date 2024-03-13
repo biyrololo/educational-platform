@@ -1,35 +1,39 @@
-# Educational platform 
+# Brl Edu
 
-some desctiption
+Интерактивная система проверки знаний [BrdEdu](https://brl-edu.netlify.app/)
 
-## Run Application
+## Запуск приложения
 
-set env variables:
-- database url
-- backend url
+### Скачайте и установите [Python](https://www.python.org/downloads/)
+### Скачайте и установите [Node.js](https://nodejs.org/en/download/)
 
-### Client
+Задайте переменные окружения:
+- ADMIN_CREATE_PASSWORD - пароль для создания администратора
+- DATABASE_URL - ссылка для подключения к базе данных
+- REACT_APP_SERVER_URL в `.env` в `client` каталоге
 
-go to `client`
+## Клиент
 
-run:
+Перейдите в `client`
 
-```
+запустите команду:
+
+```powershell
 npm install
 npm start
 ```
 
-client will open at `localhost:3000`
+Клиент будет открываться по `localhost:3000`
 
-### Server
+## Сервер
 
-go to `server`
+Перейдите в `server`
 
-run:
+запустите команду:
 
-```
+```powershell
 pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 
-server will open at `localhost:8000`
+Сервер будет открываться по `localhost:8000`
