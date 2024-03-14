@@ -4,8 +4,8 @@
 
 ## Ссылки
 
-- Сайт: [https://brl-edu.netlify.app/](https://brl-edu.netlify.app/)
-- Презентация: [https://disk.yandex.ru/i/qhBZSeJwMAxUUA](https://disk.yandex.ru/i/qhBZSeJwMAxUUA)
+- Сайт: [https://brl-edu.netlify.app/](https://brl-edu.netlify.app/), пароль для тестового аккаунта: `a9c6cd185cb2d539`
+- Презентация: [https://disk.yandex.ru/i/82uFiU8Zl7M6PA](https://disk.yandex.ru/i/82uFiU8Zl7M6PA)
 
 
 
