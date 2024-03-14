@@ -2,6 +2,13 @@
 
 Интерактивная система проверки знаний [BrdEdu](https://brl-edu.netlify.app/)
 
+## Ссылки
+
+- Сайт: [https://brl-edu.netlify.app/](https://brl-edu.netlify.app/)
+- Презентация: [https://disk.yandex.ru/i/qhBZSeJwMAxUUA](https://disk.yandex.ru/i/qhBZSeJwMAxUUA)
+
+
+
 ## Запуск приложения
 
 ### Скачайте и установите [Python](https://www.python.org/downloads/)
