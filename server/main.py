@@ -84,6 +84,7 @@ def check_answers(body : CheckAnswersBody, asks_list_id : int, pass_key : HTTPAu
         raise HTTPException(status_code=401, detail="Invalid user key")
     ans = get_asks_by_test_id(asks_list_id, db)
     body.answers.sort(key=lambda x: x.ans_id)
+    ans.sort(key=lambda x: x.id)
     incorrect = []
     for i in range(len(ans)):
         if ans[i].correct_answer != body.answers[i].answer:
