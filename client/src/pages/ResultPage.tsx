@@ -32,6 +32,8 @@ export default function ResultPage(){
 
             axios.get(url, {cancelToken: cancelToken.token})
             .then((response)=>{
+                const data : ResultType = response.data;
+                data.incorrect_asks_ids.sort((a, b)=> a - b);
                 setResult(response.data)
             })
             .catch((error)=>{

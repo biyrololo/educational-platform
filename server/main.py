@@ -132,7 +132,7 @@ def get_result_asks(body : ResultAsksItem, pass_key : HTTPAuthorizationCredentia
     user = check_user_pass_key(pass_key, db)
     if not user:
         raise HTTPException(status_code=401, detail="Invalid user key")
-    return get_asks_by_ids(body.ids, db)
+    return get_asks_by_ids(body.ids, db).sort(key=lambda x: x.id)
 
 @app.get('/result/{result_id}')
 def get_result(result_id : int, pass_key : HTTPAuthorizationCredentials = Depends(security), db = Depends(get_db)):
