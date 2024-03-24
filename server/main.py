@@ -59,6 +59,7 @@ def get_asks(asks_list_id : int, pass_key : HTTPAuthorizationCredentials = Depen
     if not user:
         raise HTTPException(status_code=401, detail="Invalid user key")
     tests = get_asks_by_test_id(asks_list_id, db)
+    tests.sort(key=lambda x: x.id)
     for test in tests:
         del test.correct_answer
     return tests
@@ -74,7 +75,6 @@ class CheckAnswersBody(BaseModel):
     test_name : str
     test_id : int
     date: str
-
 
 @app.post('/check_answers/{asks_list_id}')
 def check_answers(body : CheckAnswersBody, asks_list_id : int, pass_key : HTTPAuthorizationCredentials = Depends(security), db = Depends(get_db)):
@@ -132,7 +132,9 @@ def get_result_asks(body : ResultAsksItem, pass_key : HTTPAuthorizationCredentia
     user = check_user_pass_key(pass_key, db)
     if not user:
         raise HTTPException(status_code=401, detail="Invalid user key")
-    return get_asks_by_ids(body.ids, db).sort(key=lambda x: x.id)
+    asks = get_asks_by_ids(body.ids, db)
+    asks.sort(key=lambda x: x.id)
+    return asks
 
 @app.get('/result/{result_id}')
 def get_result(result_id : int, pass_key : HTTPAuthorizationCredentials = Depends(security), db = Depends(get_db)):
@@ -140,7 +142,8 @@ def get_result(result_id : int, pass_key : HTTPAuthorizationCredentials = Depend
     user = check_user_pass_key(pass_key, db)
     if not user:
         raise HTTPException(status_code=401, detail="Invalid user key")
-    return get_result_by_id(result_id, db)
+    result = get_result_by_id(result_id, db)
+    return result
 class CreateTestAnswerItem(BaseModel):
     text : str
     image : str = None
@@ -241,7 +244,6 @@ class LoginItem(BaseModel):
 @app.post('/login')
 def login(body : LoginItem, db = Depends(get_db)):
     user = check_user_pass_key(body.pass_key, db)
-    print(user)
     if user:
         return {"user_id" : user.id, "pass_key" : user.pass_key, "is_admin" : user.role == UserRole.admin, "name" : user.name}
     raise HTTPException(status_code=404, detail="Invalid credentials")

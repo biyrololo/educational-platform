@@ -16,7 +16,7 @@ export default function Logo() {
             alignItems: 'center',
         }}
         >
-            <img src="static/logo.png" alt="" 
+            <img src="/static/logo.png" alt="" 
             style={{width: 25, height: 25}}
             />
             <h2>
