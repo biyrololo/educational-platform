@@ -53,6 +53,7 @@ export default function LoginPage(){
                 fullWidth
                 size="small"
                 inputRef={pass_key_ref}
+                autoComplete="off"
             />
             <Button
             variant="contained"

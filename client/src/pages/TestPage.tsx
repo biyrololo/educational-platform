@@ -109,6 +109,9 @@ export default function TestPage() {
 
     return (
         <main id="test-page">
+            <Typography variant="h5" component="div">
+                {localStorage.getItem('test_name') || 'test_name'}
+            </Typography>
             <Typography variant="subtitle1" component="div">
                 Вопрос {curAnsIndex + 1} из {asks.length}
             </Typography>

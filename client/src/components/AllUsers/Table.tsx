@@ -1,10 +1,11 @@
-import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel } from "@mui/material"
+import { Box, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel } from "@mui/material"
 import { UserType } from "types/UserType"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { toast } from "react-toastify"
 import React from "react"
 import { visuallyHidden } from '@mui/utils';
+import { Delete } from "@mui/icons-material"
 
 type ColumsType = {
     key: keyof UserType;
@@ -116,6 +117,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                         </TableCell>
                     ))
                 }
+                <TableCell></TableCell>
             </TableRow>
         </TableHead>
     )
@@ -158,6 +160,20 @@ export default function UsersTable(){
 
     const sortedData = stableSort(data, getComparator(order, orderBy));
 
+    async function handleDeleteUser(id: number) {
+        const url = `/admin/delete_user/${id}`;
+
+        axios.delete(url)
+        .then((response) => {
+            toast.success('Пользователь удален');
+            setData(data.filter((data_row) => data_row.id !== id));
+        })
+        .catch((error) => {
+            console.log('Error: ', error.message);
+            toast.error('Ошибка удаления пользователя');
+        })
+    }
+
     return (
         <Paper
         sx={{ width: 1200, margin: '50px auto' }}
@@ -178,6 +194,11 @@ export default function UsersTable(){
                                             <TableCell key={key} align="center">{data_row[key as keyof UserType]}</TableCell>
                                         ))
                                     }
+                                    <TableCell align="center">
+                                        <IconButton onClick={() => handleDeleteUser(data_row.id)}>
+                                            <Delete color="error"/>
+                                        </IconButton>
+                                    </TableCell>
                                 </TableRow>
                             ))
                         }

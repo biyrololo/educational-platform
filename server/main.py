@@ -218,6 +218,17 @@ def create_user_admin(user : UserItem, admin_pass_key : HTTPAuthorizationCredent
     user_id = create_user(name=user.name, pass_key=pass_key, db=db, grade=user.grade, role=UserRole.user)
     return {"user_id" : user_id, "pass_key" : pass_key}
 
+@app.delete('/admin/delete_user/{user_id}')
+def delete_user_admin(user_id : int, admin_pass_key : HTTPAuthorizationCredentials = Depends(security), db = Depends(get_db)):
+    admin_pass_key = admin_pass_key.credentials
+    admin = check_user_pass_key(admin_pass_key, db)
+    if admin is None:
+        raise HTTPException(status_code=401, detail="Invalid Admin key")
+    if admin.role != UserRole.admin:
+        raise HTTPException(status_code=401, detail="Invalid Admin key")
+    delete_user(user_id, db)
+    return {"user_id" : user_id}
+
 @app.post('/admin/create_admin', response_model=UserResponseItem)
 def create_admin_admin(user : UserItem, create_pass_key : HTTPAuthorizationCredentials = Depends(security), db = Depends(get_db)):
     create_pass_key = create_pass_key.credentials
