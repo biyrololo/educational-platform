@@ -15,6 +15,7 @@ import LoginPage from 'pages/LoginPage';
 import AdminLoginPage from 'pages/AdminLoginPage';
 import axios from 'axios';
 import TestsPage from 'pages/TestsPage';
+import AnalyticsPage from 'pages/AnalyticsPage';
 
 function App() {
 
@@ -41,6 +42,7 @@ function App() {
         <Route path="/login" element={<LoginPage/>} />
         <Route path="/admin_login" element={<AdminLoginPage/>} />
         <Route path="/tests" element={<TestsPage/>} />
+        <Route path="/analytics" Component={AnalyticsPage} />
       </Routes>
       <ToastContainer 
             position="bottom-right"

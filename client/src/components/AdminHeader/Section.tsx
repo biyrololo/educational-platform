@@ -28,6 +28,10 @@ const SECTIONS : Section[] = [
         title: 'Результаты',
         path: '/user_results'
     },
+    {
+        title: 'Аналитика',
+        path: '/analytics'
+    }
 ]
 
 const StyledBtn = styled(Button)({

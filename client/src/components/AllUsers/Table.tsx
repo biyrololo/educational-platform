@@ -153,9 +153,12 @@ export default function UsersTable(){
             }
             else{
                 console.log('Error: ', error.message);
-                toast.error('Ошибка получения списка пользователей');
             }
         })
+
+        return () => {
+            cancelToken.cancel();
+        }
     }, [])
 
     const sortedData = stableSort(data, getComparator(order, orderBy));

@@ -126,6 +126,17 @@ def get_results(admin_pass_key : HTTPAuthorizationCredentials = Depends(security
 class ResultAsksItem(BaseModel):
     ids : List[int]
 
+@app.get('/admin/results/{test_id}')
+def get_result(test_id : int, admin_pass_key : HTTPAuthorizationCredentials = Depends(security), db = Depends(get_db)):
+    admin_pass_key = admin_pass_key.credentials
+    admin = check_user_pass_key(admin_pass_key, db)
+    if admin is None:
+        raise HTTPException(status_code=401, detail="Invalid Admin key")
+    if admin.role != UserRole.admin:
+        raise HTTPException(status_code=401, detail="Invalid Admin key")
+    result = get_all_results_by_test_id(test_id, db)
+    return result
+
 @app.post('/result/asks')
 def get_result_asks(body : ResultAsksItem, pass_key : HTTPAuthorizationCredentials = Depends(security), db = Depends(get_db)):
     pass_key = pass_key.credentials

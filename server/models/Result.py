@@ -37,3 +37,6 @@ def delete_result(id, db):
 
 def get_result_by_id(id, db):
     return db.query(Result).filter_by(id=id).first()
+
+def get_all_results_by_test_id(test_id, db):
+    return db.query(Result).filter_by(test_id=test_id).all()
